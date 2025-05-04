@@ -1,0 +1,14 @@
+/*
+Tokens of the Pencil Programming Language
+whitespaces - \n10, \t9, \r13, " "32, \f12, \v11
+letters - A..Z, a..z
+digits - 0..9
+operators - =, +, -, %, *, !=, +=, -=, ++, --, /=, *=, <, >, <=, >=, :, ;
+symbols - _, [, ], {, }, ?, (, ), &, $, #, @, |, /, \, 
+
+Define these tokens
+*/
+
+
+
+

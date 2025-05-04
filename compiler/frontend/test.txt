@@ -1,0 +1,10 @@
+// Basic sentence structure with punctuation
+Hello, world! This is a test.
+/* 
+ This is a multi-line comment.
+ Let's see how it goes
+*/
+Special characters: @ # & * ( $ % ! ^ )
+
+// End of test input
+End of ASCII test.
