@@ -82,6 +82,16 @@ int toupper(int c);
 #define toupper(c)  ((unsigned) (c) + 32)
 #define toascii(c)  ((unsigned) (c) < 128)
 
+#define isoperator(c) ((c) == '+' || (c) == '-' || (c) == '*' || (c) == '%' || (c) == '/' || (c) == '>' || (c) == '<' || (c) == '=' || (c) == '&' || (c) == '|' || (c) == '!' || (c) == '?')
+
+#define ispunct(c)  ((_ctype)[c]&(_P|_S))
+#define parenthesis(c) 
+#define lparenthesis(c)
+#define rparenthesis(c)
+
+#define curlybraces(c)
+#define rcurlybraces(c)
+#define lcurlybraces(c)
 
 #endif
 

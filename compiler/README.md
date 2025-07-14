@@ -1,4 +1,4 @@
-Syntax and Grammar definition
+#### Syntax and Grammar definition
 
 Declarations
 <var_declaration> =  var <ident> : <type> = <literal>
@@ -62,7 +62,10 @@ Identifier
 
 Literals
 <literal> = …. 
-<int_literal>  = <digit>+
+<int_literal>  = [-|+]<digit>+
+<binary_literal> = 0b<(0|1)+>
+<binary_literal> = 0x<(0|1|2|3|4|5|6|7|8|9|A|B|C|D|E|F)+>
+<binary_literal> = 0x<(0|1|2|3|4|5|6|7)+>
 <float_literal> = <digit>+ , <dot> , <digit>+ 
 <string_literal> = “ , <letter>+, “
 <char_literal> = ‘ , <letter>, ‘
@@ -110,4 +113,5 @@ values do not change.
 
 
 ## Tokens
-reference https://www.geeksforgeeks.org/tokens-in-c/
+c lang tokens - https://www.geeksforgeeks.org/tokens-in-c/
+
