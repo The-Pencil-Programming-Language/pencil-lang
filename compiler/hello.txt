@@ -1,0 +1,24 @@
+// Sample program for lexer testing
+fn main() -> int {
+    let mut x: int = 10;
+    let y: float = 20.5;
+    let name: str = "Damilola";
+
+    if x < 20 {
+        x = x + 1;
+        print("Value of x: ", x);
+    }
+
+    let user = User { id: 1, active: true };
+
+    return x;
+}
+
+/* A multiline comment testing. Second Line. Third Line. */
+
+struct User {
+    id: int;
+    active: bool;
+}
+
+/* A multiline comment testing. Second Line. Third Line. */

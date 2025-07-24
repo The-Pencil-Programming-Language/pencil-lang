@@ -1,1 +1,0 @@
- gcc compiler/frontend/src/*.c compiler/tests/test.c -o test -lcompiler/frontend/include

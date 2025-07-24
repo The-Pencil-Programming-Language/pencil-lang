@@ -1,6 +1,5 @@
-#ifndef _TOKEN_H_
-#define _TOKEN_H_
-
+#ifndef TOKEN_H_
+#define TOKEN_H_
 
 /*
 Tokens of the Pencil Programming Language
@@ -52,7 +51,9 @@ typedef enum {
     TOKEN_SEMICOLON,    
     TOKEN_COLON,    
     TOKEN_COMMA,    
-    TOKEN_DOT,    
+    TOKEN_DOT,  
+    TOKEN_QUOTE, // '  
+    TOKEN_DOUBLE_QUOTE, // '  
     TOKEN_ARROW,    
     TOKEN_ELLIPSIS, // ...    
 
@@ -65,17 +66,21 @@ typedef enum {
     TOKEN_IDENT,
 
     TOKEN_PLUS,
+    TOKEN_PLUS_PLUS,
     TOKEN_MINUS,
+    TOKEN_MINUS_MINUS,
     TOKEN_STAR,
+    TOKEN_STAR_STAR,
     TOKEN_SLASH,
     TOKEN_PERCENT,
 
-    TOKEN_EQUAL_EQUAL,
+    TOKEN_EQUAL,
     TOKEN_NOT_EQUAL,
     TOKEN_LESS,
     TOKEN_LESS_EQUAL,
     TOKEN_GREATER,
     TOKEN_GREATER_EQUAL,
+    TOKEN_SLASH_EQUAL,
 
     TOKEN_AND,
     TOKEN_OR,
@@ -102,31 +107,20 @@ typedef enum {
     TOKEN_RSHIFT_ASSIGN,
 } TokenType;
 
-// Keyword list for recognizing keywords
-const char *keywords[] = 
-{
-    "if", 
-    "else", 
-    "loop", 
-    "for",  
-    "case", 
-    "import", 
-    "struct", 
-    "enum",  
-    "int", 
-    "byte", 
-    "short", 
-    "long", 
-    "float", 
-    "double", 
-    "in", 
-    "break",
-    "continue",
-    "fn",
-    "main"
-};
+typedef struct {
+    TokenType type;
+    char *lexeme;
+    int line;
+    int column;
+} Token;
 
+extern Token* tokens[];
+extern int token_count;
 
-
+// returns the string of a token type
+const char* tokentype_to_string(TokenType type);
+void add_token(TokenType type, const char* lexeme, int length, int line, int column);
+void print_token();
+void free_tokens() ;
 
 #endif

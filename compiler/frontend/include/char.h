@@ -84,7 +84,7 @@ int toupper(int c);
 
 #define isoperator(c) ((c) == '+' || (c) == '-' || (c) == '*' || (c) == '%' || (c) == '/' || (c) == '>' || (c) == '<' || (c) == '=' || (c) == '&' || (c) == '|' || (c) == '!' || (c) == '?')
 
-#define ispunct(c)  ((_ctype)[c]&(_P|_S))
+#define ispunct(c)  ((_ctype)[c]&(_P))
 #define parenthesis(c) 
 #define lparenthesis(c)
 #define rparenthesis(c)

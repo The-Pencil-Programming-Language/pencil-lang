@@ -1,4 +1,4 @@
-#ifndef _SEMANTICS_H_
-#define _SEMANTICS_H_
+#ifndef SEMANTICS_H_
+#define SEMANTICS_H_
 
 #endif

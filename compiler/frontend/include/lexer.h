@@ -1,11 +1,11 @@
-#ifndef _TOKEN_H_
-#define _TOKEN_H_
+#ifndef LEXER_H_
+#define LEXER_H_
 
 // Scanner: read input character by character
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "token.h"
 
 #define EOF_CHAR ((char)-1)
 
@@ -19,7 +19,14 @@ extern int column;
 
 void load_source(const char *filename);
 char peek(int offset);
-char advance(void);
-int tokeniser(void);
+void advance(void);
+void skip_comments(void);
+void skip_whitespace(void);
+int lexer(void);
+
+// void add_token(TokenType type, const char* lexeme, int length);
+// void print_token();
+// void free_tokens();
+
 
 #endif

@@ -1,4 +1,4 @@
-#ifndef _SYMBOLS_H_
-#define _SYMBOLS_H_
+#ifndef SYMBOLS_H_
+#define SYMBOLS_H_
 
 #endif

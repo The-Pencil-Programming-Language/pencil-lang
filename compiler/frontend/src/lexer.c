@@ -1,11 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 #include "lexer.h"
-#include "char.h"
+#include "token.h"
 
-
-#define LOOKAHEAD 8
+#define TRUE 1
+#define FALSE 0
 
 char *source_buffer = NULL;
 char *current_input_char = NULL; 
@@ -56,253 +57,364 @@ void load_source(const char *filename)
 
 char peek(int offset)
 {
-    // moves ahead to specific character in the file
-    if (*(current_input_char + offset) == EOF_CHAR)
+    if (*(current_input_char + offset) == '\0')
     {
         return EOF_CHAR;
     }
-
     return *(current_input_char + offset);
 }
 
-void skip_comments()
+void advance(void)
+{
+    if(*current_input_char == '\n')
+    {
+        line++;
+        column = 1;
+    } else
+    {
+        column++;
+    }
+    current_input_char++;
+}
+
+void skip_whitespace(void)
 {
     while(1)
     {
-        // skip single line comments
-        if (*current_input_char == '/' && peek(1) == '/') 
+        char ch = *current_input_char;
+        switch(ch)
         {
-            // move to the second '/', skips over both '/' 
-            current_input_char += 2; 
-
-            while (*current_input_char != '\n' && *current_input_char != '\0')
-            {
-                current_input_char++;
-            }
-            continue;
+            case ' ':
+            case '\t':
+            case '\r':
+            case '\n':
+                advance();
+                break;
+            default:
+                return;
         }
-
-        // skip multi-line comment
-        else if (*current_input_char == '/' && peek(1) == '*')
-        {
-            current_input_char += 2; // skip '/*'
-
-            while (1) // check for '*/'
-            {
-                if (*current_input_char == EOF_CHAR)
-                {
-                    printf("Error: Unclosed block comment.\n");
-                    return;
-                }
-                if (*current_input_char == '*' && peek(1) == '/')
-                {
-                    current_input_char += 2;
-                    break;
-                }
-                if (*current_input_char == '\n')
-                {
-                    line++;
-                    column = 1;
-                }
-                current_input_char++;
-            }
-            continue;
-        }
-
-        // leave if not inside comment
-        break;
     }
 }
 
 
-char skip_whitespace()
+// main lexer logic
+int lexer(void)
 {
-    char temp;
-
-    // logic to skip whitespaces
-    do {
-        // set temp to current input at least one.
-        temp = *current_input_char;
-        // ignore tabs
-        if (temp == '\t' || temp == '\r')   
-        {
-            current_input_char++;
-            continue;
-        }
-        // newline handler
-        else if (temp == '\n') 
-        {
-            line++;
-            column = 0;
-        }
-        break;
-    } while(1);
-   
-    current_input_char++;
-    column++;
-    return temp;
-}
-
-char advance()
-{
-    // check for end of buffer
-    if (*current_input_char == '\0')
-    {
-        return EOF_CHAR;
-    }
-
-    char temp;
-
-    // logic to skip whitespaces
-    do {
-        // set temp to current input at least one.
-        temp = *current_input_char;
-        // ignore tabs
-        if (temp == '\t' || temp == '\r')   
-        {
-            current_input_char++;
-            continue;
-        }
-        // newline handler
-        else if (temp == '\n') 
-        {
-            line++;
-            column = 0;
-        }
-        break;
-    } while(1);
-   
-    current_input_char++;
-    column++;
-    return temp;
-}
-
-char handle_parenthesis()
-{
-
-}
-
-char handle_block()
-{
-
-}
-
-void handle_loop()
-{
-
-}
-
-void handle_selection()
-{
-
-}
-
-void handle_values()
-{
-
-}
-
-int lexer()
-{
+    printf("Lexer...\n");
     for(;;)
     {
-        skip_comments();
-        char ch = *current_input_char; // look at current character
+        skip_whitespace();
 
-        // EOF or end of buffer
-        if (ch == '\0' || ch == EOF_CHAR)
+        char ch = *current_input_char;
+
+        if (ch == '/')
         {
-            printf("DEBUG: End of file reached at line %d, column %d\n", line, column);
-            break;
-        }
-         
-        // This function checks if the current character is an operator. 
-        // It also handles cases that involves compound operators such as ==, ++, -= etc.
-        if (isoperator(ch))
-        {
-            char next = peek(1);
-            // read compound operators: ==, -=, +=, >=, etc.
-            if (isoperator(next))  // check if next character is an operator
+            if (peek(1) == '/')
             {
-                if ((ch == '+' && next == '+') ||
-                    (ch == '-' && next == '-') ||
-                    (ch == '=' && next == '=') ||
-                    (ch == '+' && next == '=') ||
-                    (ch == '-' && next == '=') ||
-                    (ch == '!' && next == '=') ||
-                    (ch == '/' && next == '=') ||
-                    (ch == '<' && next == '=') ||
-                    (ch == '>' && next == '=') ||
-                    (ch == '*' && next == '='))
+                while(ch != '\n' && ch != '\0')
                 {
-                    char op_buf[3]; // the two and null terminator; 
-                    op_buf[0] = ch;
-                    op_buf[1] = next;
-                    op_buf[2] = '\0';
-                    printf("DEBUG: operator = '%s' (ASCII: %d) line: %d col: %d\n", op_buf, ch, line, column);
                     advance();
-                    advance();
-                    continue; 
+                    ch = *current_input_char;
                 }
-                
-                printf("DEBUG: operator = '%c' (ASCII: %d) line: %d col: %d\n", ch, ch, line, column);
-                advance();
-                continue;              
+                if (ch == '\n') advance();  // (NOTE: only if newline) | consume the newline (if not EOF)
+                continue;
             }
-        }
-
-        if (isdigit(ch))
-        {
-            // read all digits untils different character type
-            do{
-                // stuck......
-            } while(peek(1) != " ")
-        }
-
-        if (isalpha(ch))
-        {
-            
-        }
-
-        // handle left parenthesis
-        if (ch == '(')
-        {
-            advance();
-            while(peek(i) != ')')
+            else if (peek(1) == '*')
             {
-                i++;
-            }
-            // copy string from current input character to i
-            char *str_buf = (char *)malloc(i + 1);  // don't forget to free after creating the token
-            for(int j = 0; j < i; j++)
-            {
-                str_buf[j] = *current_input_char;
+                // advance(); // consume '/'
+                // advance(); // consume '*'
+                while(1)
+                {
+                    advance();
+                    ch = *current_input_char;
+                    if (ch == '\0')
+                    {
+                        printf("Error: Unclosed block comment.\n");
+                        break;
+                    }
+
+                    if (peek(1) == '*' && peek(2) == '/')
+                    {
+                        advance(); advance();
+                        break;
+                    }
+                }
+
                 advance();
+                continue;
             }
-            str_buf[i] = '\0';
-             
-            printf("DEBUG: expression = '%s' (ASCII: %d) line: %d col: %d\n", str_buf, line, column);
-            advance();
+
+            // else it's a division operator or TOKEN_SLASH
             continue;
         }
 
-
-        // handle brackets
-        if (ch == '[')
+        // check for eof
+        if (ch == '\0' || ch == EOF_CHAR)
         {
-
+            add_token(TOKEN_EOF, "EOF", 3, line, column);
+            break;
         }
-
-        // left curly braces
-        if (ch == '{')
+        // handle digits
+        if (isdigit(ch))
         {
-            do 
+            int i = 1;
+            int has_point = FALSE;
+            while(1)
             {
+                char next = peek(i);
+                if (isdigit(next))
+                {
+                    i++;
+                }
+                else if (next == '.' && !has_point && isdigit(peek(i+1)))
+                {
+                    has_point = TRUE;
+                    i++;
+                }
+                else
+                {
+                    break;
+                }
+            }
 
-            } while(peek(1) != '}')
+            char lexeme[i+1];
+            for (int k = 0; k < i; k++)
+            {
+                lexeme[k] = *current_input_char;
+                advance();
+            }
+            lexeme[i] ='\0';
+            add_token(has_point ? TOKEN_FLOAT_LITERAL : TOKEN_INT_LITERAL, lexeme, i, line, column);
+            // advance();
+            continue;
         }
-        
+
+        // handle alnum
+        if (isalpha(ch))
+        {
+            int i = 0;
+            while (isalnum(peek(i)) || peek(i) == '_') {
+                i++;
+            }
+
+            char lexeme[i+1];
+            for (int k = 0; k < i; k++)
+            {
+                lexeme[k] = *current_input_char;
+                advance();
+            }
+            lexeme[i] ='\0';
+
+            // TODO: check to see if identifer is keyword
+            add_token(TOKEN_IDENTIFIER, lexeme, i, line, column);
+            // advance();
+            continue; 
+        }
+
+        string_and_char:
+        if (ch == '"' || ch == '\'') {
+            char quote = ch;
+            advance(); // skip opening quote, no need " and ' handles it before jumping here
+            int i = 0;
+            while (peek(i) != quote && peek(i) != '\0') {
+                i++;
+            }
+
+            if (peek(i) == '\0') {
+                fprintf(stderr, "Unterminated string/char literal. Line %d, Column %d\n", line, column);
+                exit(1);
+            }
+
+            char* lexeme = malloc(i + 1);
+            for (int k = 0; k < i; k++) {
+                lexeme[k] = *current_input_char;
+                advance();
+            }
+            lexeme[i] = '\0';
+            advance(); // skip closing quote
+
+            add_token(TOKEN_STRING_LITERAL, lexeme, i, line, column);
+            free(lexeme);
+            continue;
+        }
+
+        switch(ch)
+        {
+            case '"': 
+                add_token(TOKEN_DOUBLE_QUOTE, "\"", 1, line, column); 
+                advance();
+                goto string_and_char; 
+                continue;
+            case '\'': 
+                add_token(TOKEN_QUOTE, "\'", 1, line, column); 
+                advance(); 
+                goto string_and_char; 
+                continue;
+            case '(': 
+                add_token(TOKEN_LPAREN, "(", 1, line, column); 
+                advance(); 
+                continue;
+            case ')': 
+                add_token(TOKEN_RPAREN, ")", 1, line, column); 
+                advance(); 
+                continue;
+            case '{': 
+                add_token(TOKEN_LCURLY, "{", 1, line, column); 
+                advance(); 
+                continue;
+            case '}': 
+                add_token(TOKEN_RCURLY, "}", 1, line, column); 
+                advance(); 
+                continue;
+            case '[': 
+                add_token(TOKEN_LBRACKET, "[", 1, line, column); 
+                advance(); 
+                continue;
+            case ']': 
+                add_token(TOKEN_RBRACKET, "]", 1, line, column); 
+                advance(); 
+                continue;
+            case ';': 
+                add_token(TOKEN_SEMICOLON, ";", 1, line, column); 
+                advance(); 
+                continue;
+            case ':': 
+                add_token(TOKEN_COLON, ":", 1, line, column); 
+                advance(); 
+                continue;
+            case ',': 
+                add_token(TOKEN_COMMA, ",", 1, line, column); 
+                advance(); 
+                continue;
+            case '.':
+                if (peek(1) == '.' && peek(2) == '.') 
+                {
+                    add_token(TOKEN_ELLIPSIS, "...", 3, line, column);
+                    advance(); advance(); advance();
+                    continue;
+                } else 
+                {
+                    add_token(TOKEN_DOT, ".", 1, line, column);
+                    advance();
+                    continue;
+                }
+            case '=':
+                if (peek(1) == '=')
+                {
+                    add_token(TOKEN_EQUAL, "==", 3, line, column);
+                    advance();
+                    advance();
+                    continue;
+                } else 
+                {
+                    char lexeme[2] = {ch, '\0'};
+                    add_token(TOKEN_ASSIGN, lexeme, 2, line, column); 
+                    advance(); 
+                    continue;
+                }
+            case '/':
+                if (peek(1) == '=')
+                {
+                    add_token(TOKEN_SLASH_EQUAL, "/=", 3, line, column);
+                    advance();
+                    advance();
+                    continue;
+                } else 
+                {
+                    char lexeme[2] = {ch, '\0'};
+                    add_token(TOKEN_SLASH, lexeme, 2, line, column); 
+                    advance(); 
+                    continue;
+                }
+            case '-':
+                if (peek(1) == '-')
+                {
+                    add_token(TOKEN_MINUS_MINUS, "--", 3, line, column);
+                    advance();
+                    advance();
+                    continue;
+                }
+                if (peek(1) == '=')
+                {
+                    add_token(TOKEN_MINUS_ASSIGN, "-=", 3, line, column);
+                    advance();
+                    advance();
+                    continue;
+                }
+                if (peek(1) == '>')
+                {
+                    add_token(TOKEN_ARROW, "->", 3, line, column);
+                    advance();
+                    advance();
+                    continue;
+                } else 
+                {
+                    char lexeme[2] = {ch, '\0'};
+                    add_token(TOKEN_MINUS, lexeme, 2, line, column); 
+                    advance(); 
+                    continue;
+                }
+            case '+':
+                if (peek(1) == '+')
+                {
+                    add_token(TOKEN_PLUS_PLUS, "++", 3, line, column);
+                    advance();
+                    advance();
+                    continue;
+                }
+                if (peek(1) == '=')
+                {
+                    add_token(TOKEN_PLUS_ASSIGN, "+=", 3, line, column);
+                    advance();
+                    advance();
+                    continue;
+                } else 
+                {
+                    char lexeme[2] = {ch, '\0'};
+                    add_token(TOKEN_PLUS, lexeme, 2, line, column); 
+                    advance(); 
+                    continue;
+                }
+            case '*':
+                if (peek(1) == '*')
+                {
+                    add_token(TOKEN_STAR_STAR, "**", 3, line, column);
+                    advance();
+                    advance();
+                    continue;
+                }
+                if (peek(1) == '=')
+                {
+                    add_token(TOKEN_STAR_ASSIGN, "*=", 3, line, column);
+                    advance();
+                    advance();
+                    continue;
+                } else 
+                {
+                    char lexeme[2] = {ch, '\0'};
+                    add_token(TOKEN_STAR, lexeme, 2, line, column); 
+                    advance(); 
+                    continue;
+                }
+            default: 
+            {
+                // char unknown[2] = {ch, '\0'};
+                // add_token(TOKEN_UNKNOWN, unknown, 1, line, column);
+                advance();
+                break;
+            }
+        }
+
+        // If we get here, we didn't match any token pattern
+        char unknown[2] = {ch, '\0'};
+        add_token(TOKEN_UNKNOWN, unknown, 1, line, column);
+        advance();
     }
 
-    
+    return token_count;
 }
+
+
+
+
+

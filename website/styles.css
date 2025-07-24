@@ -1,0 +1,27 @@
+
+
+
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 4%;
+}
+
+.logo img{
+    width: 48px;
+    height: 48px;
+}
+
+ul{
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+
+a{
+    text-decoration: none;
+    color: black;
+    font-size: 1.25rem;
+}

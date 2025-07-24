@@ -1,5 +1,5 @@
-#ifndef _AST_H_ 
-#define _AST_H_
+#ifndef AST_H_ 
+#define AST_H_
 
 
 #endif
