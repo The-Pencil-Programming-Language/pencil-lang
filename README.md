@@ -8,9 +8,7 @@ A high-level programming language designed to build applications for users that 
 
 ### Overview
 
-Pencil-lang is a performance-oriented, general-purpose, safe, and easy-to-use programming language. Built with modern software and hardware in mind, Pencil-lang strives to enable developers to easily write low-level-enabled, efficient, and readable applications.
-
-Driven by LLVM, Pencil-lang compiles down to highly optimized native code, making it an excellent solution for system-level programming, high-performance software, and contemporary software that needs to take full advantage of hardware capabilities.
+-- todo: add overview
 
 ---
 ### Features
@@ -19,29 +17,27 @@ General Purpose – Suitable to build everything ranging from command-line utili
 
 Simple Syntax – Concise, easy to learn, read, and write. Developer productivity and readability take precedence.
 
-LLVM Integration – Close integration with LLVM allows NovaLang to generate efficient machine code and cross-platform compilation.
-
 Safe & Stable – Memory safety, strong typing, and reliability and predictability at runtime.
 
 
 ---
 ### Code Example
 
-fn main() {
-    print("Hello, world!");
-}
+        name: string = "Pencil";
+        sentence: string = f"My name is {name}";
+            
+        print(name);
 
-More code examples coming soon.
 
 
 ---
 ### Goals
 
-Clean and expressive syntax without sacrificing performance
+Clean and expressive syntax without sacrificing performance.
+
+Reduce typing, with less text while still expressive and readable.
 
 A standard toolchain consisting of a compiler, package manager, and language server
-
-Great C/LLVM interop for system-level extension possibilities
 
 Memory safety by default with low-level control where needed
 
@@ -69,6 +65,8 @@ Tutorials and guides
 
 Pencil-lang is still in its infancy. To build from source:
 
+run **make** command in your terminal in the compiler directory
+
 ---
 
 ### Contributing
@@ -85,4 +83,4 @@ Learn more at LICENSE.
 ---
  Why Pencil-lang?
 
-New hardware demands new languages. Pencil-lang is your tool for building quick, stable, and future-proof applications without legacy language ecosystem overhead.
+It's simple syntax is the mai  feature of the language.

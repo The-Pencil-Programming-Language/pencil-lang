@@ -1,18 +1,19 @@
 #### Syntax and Grammar definition
 
 Declarations
-<var_declaration> =  var <ident> : <type> = <literal>
-<const_declaration> = let <ident> : <type> = <literal>
-<import_declaration> = import,  “<string_literal>”
+<var_declaration> ->  <ident> : <type> = <literal>
+<const_declaration> -> <ident> : const <type> = <literal>
+<import_declaration> -> import “<string_literal>”
 
 functions
-<param_list> → (<ident>:<type>)*
-<function_declaration> → 
-fn , <ident>, (, <param_list>, ), →  <return_type> { <block> }
+<param_list> → (<ident> : <type>)*
+<function_declaration> → fn <ident> (<param_list>) → <return_type> { <block> }
 
 Pattern Matching
 <pattern> → _ | Some(<expr>) | Ok(<expr>) | Error(<expr>) | <literal> 
-<match_stmt> →  match <expr> { <case>+: (<pattern> => <stmt>) + }
+   case <pattern> : <literal> => <stmt>
+                |   <literal> => <stmt>
+                |   _ => <stmt>
 
 Statements
 <stmt> = <expr> | <stmt_list> 
@@ -22,7 +23,7 @@ Statements
 <if_stmt> →  if (<logical_expr>) { <stmt> | <stmt_list> | <block> }
 <loop_stmt> → loop(<logical_expr> | <int_literal>) { <block> }
 <break_stmt> = break <esc>
-<continue_stmt> = continue <esc>
+  <continue_stmt> = continue <esc>
 
 Operators
 <arithmetic_op> = <add_op> | <mult_op> | <rem_op>
@@ -37,14 +38,14 @@ Operators
 <logical_op> = && | || | !
 <bitwise_op> = &, |, ^, ~, >>, <<
 <comparison_op> → == | != | > | < | <= | >= | is | in
-<assign_op> → = | += |  -= | *= |  /= | %=
+<assign_op> → = | += | -= | *= |  /= | %=
 
 Expressions
 <expr> → <assign_expr> | <logical_expr> | <arithmetic_expr> | <equality_expr> | <relation_expr> | <unary_expr> | <func_call> | <index>
 
 <assign> → <var_declaration> | <const_declaration>
-<logical_expr> →  (<expr>) <logical_op> (<expr>)
-<arithmetic_op> → (<expr>) <arithmetic_op> (<expr>)
+<logical_expr> →  <expr> <logical_op> <expr> |<unary_expr>
+<arithmetic_op> → <int_literal> <arithmetic_op> <int_literal>
 <equality_expr> → <expr> <comparison_op> <expr>
 <relation_expr> → <expr> <relation_op> <expr>
 <unary_expr> → <op> <ident>
@@ -70,23 +71,28 @@ Literals
 <string_literal> = “ , <letter>+, “
 <char_literal> = ‘ , <letter>, ‘
 <bool_literal> = True | False
-<null> = Nil
 
 Whitespace and Comments
 <whitespace> = “ “
 <line_comment> = // , <string>*, <esc>
-<block_comment> = /*, <block> , */
+<block_comment> = /*, <string> , */
 
 Types
 primitive types: short, char, int, long, float, double bit, byte, word
 1. Type <type> = Int | Float | <array> | <struct> | <enum>
 2. Array <array> →  <ident>:<type> = [<literal>+]
 3. Struct
-<struct> →struct <ident>{ (<ident>:<type> = [literal, literal*] )+ }
+<struct> → struct <ident>{ (<ident>:<type> = [literal, literal*] )+ }
 4. enum <ident> : <ident>+
-
+5. implements -> definition of functions that can be used only on specified data(s) e.g
+implements User, Group {
+    fn function0() {}
+    fn function1() {}
+    fn function2() {}
+}
 
 ## Punctuators
+
 ## Keywords
 int
 float
@@ -101,17 +107,14 @@ match
 case
 loop
 return
+
 ## Strings
-An array of characters with a terminating character \0. Enclosed in double quotes.
+An array of characters with a terminating character \0. Enclosed in double quotes. Strings declare their length before use.
 ## Operators
-Symbols that trigger an execution on one or more data
+Symbols that trigger an execution on one or more data values.
 ## Identifiers
 Names given to variables, functions, arrays, other user-defined elements. Begin with a letter or an underscore but not a digit.
 ## Constants
-values do not change.
+These values do not change throunghout a programs lifetime
 
-
-
-## Tokens
-c lang tokens - https://www.geeksforgeeks.org/tokens-in-c/
 

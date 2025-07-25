@@ -1,27 +1,261 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    box-sizing: border-box;
+    background-color: #fdf6e3; /* Paper tone */
+    color: #2b2b2b; /* Pencil/graphite */
+}
 
+span {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #8b5e3c; /* Brown pencil wood */
+}
 
-
-nav{
+nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1.2rem 4%;
+    position: sticky;
+    top: 0;
+    background-color: #ffcc00; /* Pencil yellow */
+    color: #2b2b2b;
 }
 
-.logo img{
+.logo img {
     width: 48px;
     height: 48px;
 }
 
-ul{
+ul {
     display: flex;
     gap: 2rem;
     list-style: none;
 }
 
-
-a{
-    text-decoration: none;
-    color: black;
+.nav-link {
     font-size: 1.25rem;
+    text-decoration: none;
+    color: #2b2b2b;
+    font-weight: 600;
+}
+
+.nav-link:hover {
+    color: #8b5e3c;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+}
+
+.hero {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    align-items: flex-start;
+    min-height: 45vh;
+    width: 100%;
+}
+
+.right {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 5% 7%;
+}
+
+.left {
+    width: 25%;
+    align-self: center;
+}
+
+.left .primary-cta-btn {
+    text-decoration: none;
+    color: white;
+    font-size: 1.25rem;
+    background-color: #556b2f; /* Pencil accent */
+    border: none;
+    border-radius: 8px;
+    padding: 1rem 2rem;
+}
+
+.hero .right h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    margin: 0;
+    color: #333333;
+}
+
+.hero .right p {
+    font-size: 1.5rem;
+    font-weight: lighter;
+}
+
+/* Why section */
+.why {
+    background-color: #fff5d7;
+    padding: 2rem 5%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Features section */
+.features {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 4%;
+    background-color: #fefae0;
+    color: #2b2b2b;
+}
+
+.features h2 {
+    font-size: 2rem;
+    text-decoration: underline;
+    text-decoration-thickness: 6px;
+    color: #8b5e3c;
+}
+
+.features .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.feature-card {
+    width: calc(25% - 2rem);
+    background-color: #fffdf6;
+    border: 2px solid #ccc5b9;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.feature-card-header {
+    font-size: 1.75rem;
+    color: #333333;
+}
+
+.feature-card-content {
+    font-size: 1.5rem;
+}
+
+/* Syntax section */
+.code-example {
+    height: 35vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 2rem 5%;
+    background-color: #2b2b2b; /* Pencil lead black */
+    color: #ffcc00; /* Text highlight */
+}
+
+/* Goals section */
+.goals {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 4%;
+    background-color: #fefefe;
+}
+
+.goals h3 {
+    font-size: 1.75rem;
+}
+
+.goals ul {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    list-style: none;
+}
+
+.goals ul li {
+    border: 2px solid #8b5e3c;
+    border-radius: 2rem;
+    padding: 1rem 1rem;
+    background-color: #fff8e7;
+    width: calc(45% - 12px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.goals ul li p {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+/* Documentation */
+.documentation {
+    display: flex;
+    flex-direction: column;
+    padding: 3rem 5%;
+    background-color: #fffbe6;
+}
+
+.documentation ul {
+    list-style-type: none;
+}
+
+.documentation ul li p {
+    font-size: 1.2rem;
+}
+
+/* Develop */
+.develop {
+    padding: 3rem 10%;
+    display: flex;
+    gap: 1rem;
+}
+
+.item {
+    border: none;
+    color: #2b2b2b;
+    border-radius: 8px;
+    padding: 1rem;
+    background-color: #fdf6e3;
+    width: calc(33% - 1rem);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Project lead */
+.creator {
+    display: flex;
+    flex-direction: column;
+    padding: 5%;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff5cc;
+}
+
+.creator h3 {
+    text-align: center;
+}
+
+.creator p {
+    font-size: 1.25rem;
+}
+
+a {
+    text-decoration: none;
+    color: #1a4f3f;
+}
+
+/* Footer */
+footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    padding-top: 2rem;
+    background-color: #ffcc00;
+    color: #2b2b2b;
+}
+
+.footer-links {
+    display: flex;
+    gap: 2rem;
 }

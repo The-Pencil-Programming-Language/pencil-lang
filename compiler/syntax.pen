@@ -1,0 +1,31 @@
+letter: char = 'a'
+age: int = 12
+pi: const float = 3.14
+name: string = "Philip"
+
+
+loop {
+    // block of stmts
+}
+
+loop (expr) {
+    // block of stmts
+}
+
+
+if (expr) {
+    // block of stmts
+} else if (expr) {
+    // block of stmts
+} else {
+    // block of stmts
+}
+
+case pattern :
+    val1 => stmt | block of stmts
+    val2 => stmt | block of stmts
+    _ => stmt | block of stmts
+
+
+if token is a language construct declare a new node of the construct e.g for, loop, if etc.
+follow sequence of token when parsing
