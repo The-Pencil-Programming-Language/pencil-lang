@@ -83,4 +83,4 @@ Learn more at LICENSE.
 ---
  Why Pencil-lang?
 
-It's simple syntax is the mai  feature of the language.
+It's simple syntax is the main  feature of the language.
