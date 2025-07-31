@@ -1,29 +1,43 @@
 #### Syntax and Grammar definition
 
 Declarations
-<var_declaration> ->  <ident> : <type> = <literal>
-<const_declaration> -> <ident> : const <type> = <literal>
-<import_declaration> -> import “<string_literal>”
+<var_declaration> ->  <ident> : <type> = <literal> e.g count: int = 2;
+<const_declaration> -> <ident> : const <type> = <literal> e.g const PI: float = 3.142;
+<import_declaration> -> import “<string_literal>” e.g import "Pencil";
 
 functions
-<param_list> → (<ident> : <type>)*
+<param_list> → (<ident> : <type>)* e.g (a: int, b: str)
 <function_declaration> → fn <ident> (<param_list>) → <return_type> { <block> }
+e.g fn add(a:int, b:int) -> int {}
 
 Pattern Matching
 <pattern> → _ | Some(<expr>) | Ok(<expr>) | Error(<expr>) | <literal> 
    case <pattern> : <literal> => <stmt>
                 |   <literal> => <stmt>
                 |   _ => <stmt>
+e.g case value:
+        0 => "zero"
+        10 => "ten"
+        100 => "hundred"
+        _ => "empty"
 
 Statements
 <stmt> = <expr> | <stmt_list> 
+e.g area: int = len * breadth
 <stmt_list> = <stmt>+
 <block> = <stmt_list>
-<return_stmt> = return (<literal> | <ident>)*
+<return_stmt> = (<literal> | <ident>)*
+e.g area
+    0
+    -1
 <if_stmt> →  if (<logical_expr>) { <stmt> | <stmt_list> | <block> }
+e.g if (a > b) {}
 <loop_stmt> → loop(<logical_expr> | <int_literal>) { <block> }
+loop (1) {}
+loop (a != 10) {}
+
 <break_stmt> = break <esc>
-  <continue_stmt> = continue <esc>
+<continue_stmt> = continue <esc>
 
 Operators
 <arithmetic_op> = <add_op> | <mult_op> | <rem_op>
@@ -62,15 +76,16 @@ Identifier
 <ident> = <letter>+ | ( <letter> | <digit> | _)*
 
 Literals
-<literal> = …. 
-<int_literal>  = [-|+]<digit>+
+<literal> = ...
+<decimal_literal>  = [-|+]<digit>+
 <binary_literal> = 0b<(0|1)+>
-<binary_literal> = 0x<(0|1|2|3|4|5|6|7|8|9|A|B|C|D|E|F)+>
-<binary_literal> = 0x<(0|1|2|3|4|5|6|7)+>
+<hex_literal> = 0x<(0|1|2|3|4|5|6|7|8|9|A|B|C|D|E|F)+>
+<octal_literal> = 0x<(0|1|2|3|4|5|6|7)+>
 <float_literal> = <digit>+ , <dot> , <digit>+ 
 <string_literal> = “ , <letter>+, “
 <char_literal> = ‘ , <letter>, ‘
 <bool_literal> = True | False
+
 
 Whitespace and Comments
 <whitespace> = “ “
@@ -95,9 +110,12 @@ implements User, Group {
 
 ## Keywords
 int
+short
 float
 double
 char
+long
+byte
 string
 struct
 enum
@@ -106,7 +124,9 @@ else
 match
 case
 loop
-return
+signed
+unsigned
+
 
 ## Strings
 An array of characters with a terminating character \0. Enclosed in double quotes. Strings declare their length before use.

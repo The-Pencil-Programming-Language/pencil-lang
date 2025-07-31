@@ -2,11 +2,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <string.h>
 #include "lexer.h"
 #include "token.h"
 
 #define TRUE 1
 #define FALSE 0
+#define KEYWORDS 22
 
 char *source_buffer = NULL;
 char *current_input_char = NULL; 
@@ -154,39 +156,149 @@ int lexer(void)
             add_token(TOKEN_EOF, "EOF", 3, line, column);
             break;
         }
+        
         // handle digits
+        // handle different number systems like hex, octal and binary
+        // check for 0x or 0X
+        // check for 0b or 0B
+        // check for 0o or 0O
+        // and for floating point check for point '.' while scanning
         if (isdigit(ch))
         {
-            int i = 1;
-            int has_point = FALSE;
-            while(1)
+            if (ch == '0')
             {
-                char next = peek(i);
-                if (isdigit(next))
+                int has_point = FALSE;
+                char next = peek(1);
+                
+                if (next == 'b' || next == 'B') 
                 {
-                    i++;
-                }
-                else if (next == '.' && !has_point && isdigit(peek(i+1)))
+                    advance();
+                    advance(); // skip the prefix -> '0b'
+                    int j = 0;
+                    while(peek(j) == '0' || peek(j) == '1')
+                    {
+                        j++;
+                    }
+                    char lexeme[j+1];
+                    for (int k = 0; k < j; k++)
+                    {
+                        lexeme[k] = *current_input_char;
+                        advance();
+                    }
+                    lexeme[j] = '\0';
+                    add_token(TOKEN_BINARY_LITERAL, lexeme, j, line, column-j);
+                    continue;
+                } 
+                
+                if (next == 'o' || next == 'O') 
                 {
-                    has_point = TRUE;
-                    i++;
-                }
-                else
+                    advance();
+                    advance(); // skip the prefix -> '0o'
+                    int j = 0;
+                    while(peek(j) >= '0' && peek(j) <= '7')
+                    {
+                        j++;
+                    }
+                    char lexeme[j+1];
+                    for (int k = 0; k < j; k++)
+                    {
+                        lexeme[k] = *current_input_char;
+                        advance();
+                    }
+                    lexeme[j] = '\0';
+                    add_token(TOKEN_OCTAL_LITERAL, lexeme, j, line, column-j);
+                    continue;
+                } 
+                
+                if (next == 'x' || next == 'X') 
                 {
-                    break;
+                    advance();
+                    advance(); // skip the prefix -> '0x'
+                    int j = 0;
+                    while(isxdigit(peek(j)))  // Using isxdigit() for cleaner hex checking
+                    {
+                        j++;
+                    }
+                    char lexeme[j+1];
+                    for (int k = 0; k < j; k++)
+                    {
+                        lexeme[k] = *current_input_char;
+                        advance();
+                    }
+                    lexeme[j] = '\0';
+                    add_token(TOKEN_HEX_LITERAL, lexeme, j, line, column-j);
+                    continue;
                 }
-            }
 
-            char lexeme[i+1];
-            for (int k = 0; k < i; k++)
-            {
-                lexeme[k] = *current_input_char;
-                advance();
+                // Handle regular numbers starting with 0 (including 0.5, 007, etc.)
+                int i = 0;  // Start from current position
+                char curr = ch;  // Start with the '0' we already have
+                
+                while(1)
+                {
+                    if (isdigit(curr))
+                    {
+                        i++;
+                        curr = peek(i);
+                    }
+                    else if (curr == '.' && !has_point && isdigit(peek(i+1)))
+                    {
+                        has_point = TRUE;
+                        i++;
+                        curr = peek(i);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                
+                char lexeme[i+1];
+                for (int k = 0; k < i; k++)
+                {
+                    lexeme[k] = *current_input_char;
+                    advance();
+                }
+                lexeme[i] = '\0';
+                add_token(has_point ? TOKEN_FLOAT_LITERAL : TOKEN_INT_LITERAL, lexeme, i, line, column-i);
+                continue;
             }
-            lexeme[i] ='\0';
-            add_token(has_point ? TOKEN_FLOAT_LITERAL : TOKEN_INT_LITERAL, lexeme, i, line, column);
-            // advance();
-            continue;
+            else
+            {
+                // Handle numbers not starting with 0
+                int i = 0;
+                int has_point = FALSE;
+                char curr = ch;
+                
+                while(1)
+                {
+                    if (isdigit(curr))
+                    {
+                        i++;
+                        curr = peek(i);
+                    }
+                    else if (curr == '.' && !has_point && isdigit(peek(i+1)))
+                    {
+                        has_point = TRUE;
+                        i++;
+                        curr = peek(i);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                
+                char lexeme[i+1];
+                for (int k = 0; k < i; k++)
+                {
+                    lexeme[k] = *current_input_char;
+                    advance();
+                }
+                lexeme[i] = '\0';
+                add_token(has_point ? TOKEN_FLOAT_LITERAL : TOKEN_INT_LITERAL, lexeme, i, line, column-i);
+                continue;
+            }
         }
 
         // handle alnum
@@ -205,14 +317,30 @@ int lexer(void)
             }
             lexeme[i] ='\0';
 
-            // TODO: check to see if identifer is keyword
-            add_token(TOKEN_IDENTIFIER, lexeme, i, line, column);
+            // TODO: check to see if identifer is keyword == done
+            // next is to map each keyword to their corresponding token
+            int j = 0;
+            while(j != KEYWORDS)
+            {
+                if (strcmp(keywords[j], lexeme) == 0)
+                {
+                    add_token(keyword_to_token(keywords[j]), lexeme, i, line, column-i);
+                    break;
+                }
+                j++;
+            }
+
+            if (j == KEYWORDS)
+            {
+                add_token(TOKEN_IDENTIFIER, lexeme, i, line, column-i);
+            }
             // advance();
             continue; 
         }
 
         string_and_char:
-        if (ch == '"' || ch == '\'') {
+        if (ch == '"' || ch == '\'') 
+        {
             char quote = ch;
             advance(); // skip opening quote, no need " and ' handles it before jumping here
             int i = 0;
@@ -411,7 +539,7 @@ int lexer(void)
         advance();
     }
 
-    return token_count;
+    return 0;
 }
 
 

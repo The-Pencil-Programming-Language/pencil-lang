@@ -16,10 +16,15 @@ int main()
         return -1;
     }
     
+    init_global_token_array();
     lexer();
-    print_token();
-    free_tokens();
-
+    
+    // Just show the essential info
+    print_tokens_filtered_global();  // Clean token list
+    print_tokens_as_source_global();  // Clean token list
+    print_token_stats_global();      // Quick statistics
+    // free_tokens();
+    free_token_array(global_token_array);
     return 0;
 }
 

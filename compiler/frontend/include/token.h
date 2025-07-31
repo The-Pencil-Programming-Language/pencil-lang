@@ -13,7 +13,8 @@ Define token types (enums and macros for keywords, operators, identifiers etc.)
 */
 
 // Tokentypes
-typedef enum {
+typedef enum 
+{
     TOKEN_IF,
     TOKEN_ELSE,
     TOKEN_FOR,
@@ -23,12 +24,17 @@ typedef enum {
     TOKEN_CASE,
 
     TOKEN_FN,
+    TOKEN_MAIN,
 
     TOKEN_STRUCT,
     TOKEN_ENUM,
     TOKEN_TYPE,
     TOKEN_IMPORT,
     
+    TOKEN_SIGNED,
+    TOKEN_UNSIGNED,
+
+    // decimal literals
     TOKEN_INT_LITERAL,
     TOKEN_SHORT_LITERAL,
     TOKEN_BYTE_LITERAL,
@@ -37,10 +43,18 @@ typedef enum {
     TOKEN_DOUBLE_LITERAL,
     TOKEN_CHAR_LITERAL,
     TOKEN_BOOL_LITERAL,
+
+    // hex, octal and binary literals
+    TOKEN_HEX_LITERAL,
+    TOKEN_OCTAL_LITERAL,
+    TOKEN_BINARY_LITERAL,
+
+    // string literal
     TOKEN_STRING_LITERAL,
 
     TOKEN_WHITESPACE,
     TOKEN_IDENTIFIER,
+    TOKEN_KEYWORD,
 
     TOKEN_LBRACKET, // [
     TOKEN_RBRACKET, // ]
@@ -107,20 +121,32 @@ typedef enum {
     TOKEN_RSHIFT_ASSIGN,
 } TokenType;
 
-typedef struct {
+typedef struct 
+{
     TokenType type;
     char *lexeme;
     int line;
     int column;
 } Token;
 
+typedef struct
+{
+    Token** tokens;
+    int count;
+    int capacity;
+} TokenArray;
+
 extern Token* tokens[];
 extern int token_count;
+extern const char *keywords[];
+extern TokenArray* global_token_array;
 
 // returns the string of a token type
 const char* tokentype_to_string(TokenType type);
 void add_token(TokenType type, const char* lexeme, int length, int line, int column);
 void print_token();
-void free_tokens() ;
+void free_tokens();
+TokenType keyword_to_token(char *keyword);
+
 
 #endif
