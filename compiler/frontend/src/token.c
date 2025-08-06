@@ -12,153 +12,130 @@ const char *keywords[] =
     "struct", 
     "enum",  
     "int", 
-    "byte", 
     "char",
-    "str",
-    "short", 
-    "long", 
-    "float", 
-    "double", 
+    "str", 
+    "float",  
     "break",
     "continue",
     "fn",
     "main",
-    "unsigned",
-    "signed"
+    "impl",
+    "const"
 };
 
 TokenType keyword_to_token(char *keyword)
 {
-    if (strcmp(keyword, "if") == 0) return TOKEN_IF;
-    else if (strcmp(keyword, "else") == 0) return TOKEN_ELSE;
-    else if (strcmp(keyword, "loop") == 0) return TOKEN_LOOP;
-    else if (strcmp(keyword, "for") == 0) return TOKEN_FOR;
-    else if (strcmp(keyword, "case") == 0) return TOKEN_CASE;
-    else if (strcmp(keyword, "import") == 0) return TOKEN_IMPORT;
-    else if (strcmp(keyword, "struct") == 0) return TOKEN_STRUCT;
-    else if (strcmp(keyword, "enum") == 0) return TOKEN_ENUM;
-    else if (strcmp(keyword, "break") == 0) return TOKEN_BREAK;
-    else if (strcmp(keyword, "continue") == 0) return TOKEN_CONTINUE;
-    else if (strcmp(keyword, "fn") == 0) return TOKEN_FN;
-    else if (strcmp(keyword, "main") == 0) return TOKEN_MAIN;
-    else if (strcmp(keyword, "byte") == 0) return TOKEN_TYPE;
-    else if (strcmp(keyword, "short") == 0) return TOKEN_TYPE;
-    else if (strcmp(keyword, "str") == 0) return TOKEN_TYPE;
-    else if (strcmp(keyword, "char") == 0) return TOKEN_TYPE;
-    else if (strcmp(keyword, "int") == 0) return TOKEN_TYPE;
-    else if (strcmp(keyword, "long") == 0) return TOKEN_TYPE;
-    else if (strcmp(keyword, "float") == 0) return TOKEN_TYPE;
-    else if (strcmp(keyword, "double") == 0) return TOKEN_TYPE;
-    else if (strcmp(keyword, "signed") == 0) return TOKEN_SIGNED;
-    else if (strcmp(keyword, "unsigned") == 0) return TOKEN_UNSIGNED;
-    else return TOKEN_UNKNOWN;
+    if (strcmp(keyword, "if") == 0) return IF;
+    else if (strcmp(keyword, "else") == 0) return ELSE;
+    else if (strcmp(keyword, "loop") == 0) return LOOP;
+    else if (strcmp(keyword, "for") == 0) return FOR;
+    else if (strcmp(keyword, "case") == 0) return CASE;
+    else if (strcmp(keyword, "import") == 0) return IMPORT;
+    else if (strcmp(keyword, "struct") == 0) return STRUCT;
+    else if (strcmp(keyword, "enum") == 0) return ENUM;
+    else if (strcmp(keyword, "break") == 0) return BREAK;
+    else if (strcmp(keyword, "continue") == 0) return CONTINUE;
+    else if (strcmp(keyword, "fn") == 0) return FN;
+    else if (strcmp(keyword, "main") == 0) return MAIN;
+    else if (strcmp(keyword, "str") == 0) return TYPE;
+    else if (strcmp(keyword, "char") == 0) return TYPE;
+    else if (strcmp(keyword, "int") == 0) return TYPE;
+    else if (strcmp(keyword, "long") == 0) return TYPE;
+    else if (strcmp(keyword, "float") == 0) return TYPE;
+    else if (strcmp(keyword, "const") == 0) return CONST;
+    else return UNKNOWN;
 }
 
 
 const char* tokentype_to_string(TokenType type) 
 {
     switch (type) {
-        case TOKEN_IF: return "TOKEN_IF";
-        case TOKEN_ELSE: return "TOKEN_ELSE";
-        case TOKEN_FOR: return "TOKEN_FOR";
-        case TOKEN_LOOP: return "TOKEN_LOOP";
-        case TOKEN_BREAK: return "TOKEN_BREAK";
-        case TOKEN_CONTINUE: return "TOKEN_CONTINUE";
-        case TOKEN_CASE: return "TOKEN_CASE";
+        case IF: return "IF";
+        case ELSE: return "ELSE";
+        case FOR: return "FOR";
+        case LOOP: return "LOOP";
+        case BREAK: return "BREAK";
+        case CONTINUE: return "CONTINUE";
+        case CASE: return "CASE";
 
-        case TOKEN_FN: return "TOKEN_FN";
-        case TOKEN_MAIN: return "TOKEN_MAIN";
+        case FN: return "FN";
+        case MAIN: return "MAIN";
 
-        case TOKEN_STRUCT: return "TOKEN_STRUCT";
-        case TOKEN_ENUM: return "TOKEN_ENUM";
-        case TOKEN_TYPE: return "TOKEN_TYPE";
-        case TOKEN_IMPORT: return "TOKEN_IMPORT";
+        case STRUCT: return "STRUCT";
+        case ENUM: return "ENUM";
+        case TYPE: return "TYPE";
+        case CONST: return "CONST";
+        case IMPORT: return "IMPORT";
 
-        case TOKEN_INT_LITERAL: return "TOKEN_INT_LITERAL";
-        case TOKEN_SHORT_LITERAL: return "TOKEN_SHORT_LITERAL";
-        case TOKEN_BYTE_LITERAL: return "TOKEN_BYTE_LITERAL";
-        case TOKEN_LONG_LITERAL: return "TOKEN_LONG_LITERAL";
-        case TOKEN_FLOAT_LITERAL: return "TOKEN_FLOAT_LITERAL";
-        case TOKEN_DOUBLE_LITERAL: return "TOKEN_DOUBLE_LITERAL";
-        case TOKEN_CHAR_LITERAL: return "TOKEN_CHAR_LITERAL";
-        case TOKEN_BOOL_LITERAL: return "TOKEN_BOOL_LITERAL";
-        
-        case TOKEN_HEX_LITERAL: return "TOKEN_HEX_LITREAL";
-        case TOKEN_OCTAL_LITERAL: return "TOKEN_OCTAL_LITREAL";
-        case TOKEN_BINARY_LITERAL: return "TOKEN_BINARY_LITREAL";
+        case INT_LITERAL: return "INT_LITERAL";
+        case FLOAT_LITERAL: return "FLOAT_LITERAL";
+        case CHAR_LITERAL: return "CHAR_LITERAL";
+        case BOOL_LITERAL: return "BOOL_LITERAL";
+        case HEX_LITERAL: return "HEX_LITREAL";
+        case OCTAL_LITERAL: return "OCTAL_LITREAL";
+        case BINARY_LITERAL: return "BINARY_LITREAL";
+        case STRING_LITERAL: return "STRING_LITERAL";
 
-        case TOKEN_STRING_LITERAL: return "TOKEN_STRING_LITERAL";
+        case WHITESPACE: return "WHITESPACE";
+        case IDENTIFIER: return "IDENTIFIER";
+        case KEYWORD: return "KEYWORD";
 
-        case TOKEN_WHITESPACE: return "TOKEN_WHITESPACE";
-        case TOKEN_IDENTIFIER: return "TOKEN_IDENTIFIER";
-        case TOKEN_KEYWORD: return "TOKEN_KEYWORD";
+        case LBRACKET: return "LBRACKET";
+        case RBRACKET: return "RBRACKET";
+        case LCURLY: return "LCURLY";
+        case RCURLY: return "RCURLY";
+        case LPAREN: return "LPAREN";
+        case RPAREN: return "RPAREN";
+        case SEMICOLON: return "SEMICOLON";
+        case COLON: return "COLON";
+        case COMMA: return "COMMA";
+        case QUOTE: return "QUOTE";
+        case DOUBLE_QUOTE: return "DOUBLE_QUOTE";
+        case DOT: return "DOT";
+        case ARROW: return "ARROW";
 
-        case TOKEN_LBRACKET: return "TOKEN_LBRACKET";
-        case TOKEN_RBRACKET: return "TOKEN_RBRACKET";
-        case TOKEN_LCURLY: return "TOKEN_LCURLY";
-        case TOKEN_RCURLY: return "TOKEN_RCURLY";
-        case TOKEN_LPAREN: return "TOKEN_LPAREN";
-        case TOKEN_RPAREN: return "TOKEN_RPAREN";
-        case TOKEN_SEMICOLON: return "TOKEN_SEMICOLON";
-        case TOKEN_COLON: return "TOKEN_COLON";
-        case TOKEN_COMMA: return "TOKEN_COMMA";
-        case TOKEN_QUOTE: return "TOKEN _QUOTE";
-        case TOKEN_DOUBLE_QUOTE: return "TOKEN _DOUBLE_QUOTE";
-        case TOKEN_DOT: return "TOKEN_DOT";
-        case TOKEN_ARROW: return "TOKEN_ARROW";
-        case TOKEN_ELLIPSIS: return "TOKEN_ELLIPSIS";
+        case TOKEN_EOF: return "EOF";
 
-        case TOKEN_EOF: return "TOKEN_EOF";
-        case TOKEN_UNKNOWN: return "TOKEN_UNKNOWN";
+        case NEW: return "NEW";
+        case DROP: return "DROP";
 
-        case TOKEN_NEW: return "TOKEN_NEW";
-        case TOKEN_DROP: return "TOKEN_DROP";
+        case PLUS: return "PLUS";
+        case MINUS: return "MINUS";
+        case STAR: return "STAR";
+        case SLASH: return "SLASH";
+        case PERCENT: return "PERCENT";
 
-        case TOKEN_IDENT: return "TOKEN_IDENT";
+        case EQUAL: return "EQUAL";
+        case NOT_EQUAL: return "NOT_EQUAL";
+        case LESS: return "LESS";
+        case LESS_EQUAL: return "LESS_EQUAL";
+        case GREATER: return "GREATER";
+        case GREATER_EQUAL: return "GREATER_EQUAL";
 
-        case TOKEN_PLUS: return "TOKEN_PLUS";
-        case TOKEN_MINUS: return "TOKEN_MINUS";
-        case TOKEN_STAR: return "TOKEN_STAR";
-        case TOKEN_SLASH: return "TOKEN_SLASH";
-        case TOKEN_PERCENT: return "TOKEN_PERCENT";
+        case AND: return "AND";
+        case OR: return "OR";
+        case NOT: return "NOT";
 
-        case TOKEN_EQUAL: return "TOKEN_EQUAL";
-        case TOKEN_NOT_EQUAL: return "TOKEN_NOT_EQUAL";
-        case TOKEN_LESS: return "TOKEN_LESS";
-        case TOKEN_LESS_EQUAL: return "TOKEN_LESS_EQUAL";
-        case TOKEN_GREATER: return "TOKEN_GREATER";
-        case TOKEN_GREATER_EQUAL: return "TOKEN_GREATER_EQUAL";
+        case BITWISE_AND: return "BITWISE_AND";
+        case BITWISE_OR: return "BITWISE_OR";
+        case BITWISE_XOR: return "BITWISE_XOR";
+        case BITWISE_NOT: return "BITWISE_NOT";
+        case LSHIFT: return "LSHIFT";
+        case RSHIFT: return "RSHIFT";
 
-        case TOKEN_AND: return "TOKEN_AND";
-        case TOKEN_OR: return "TOKEN_OR";
-        case TOKEN_NOT: return "TOKEN_NOT";
+        case ASSIGN: return "ASSIGN";
+        case PLUS_ASSIGN: return "PLUS_ASSIGN";
+        case MINUS_ASSIGN: return "MINUS_ASSIGN";
+        case STAR_ASSIGN: return "STAR_ASSIGN";
+        case SLASH_ASSIGN: return "SLASH_ASSIGN";
+        case PERCENT_ASSIGN: return "PERCENT_ASSIGN";
 
-        case TOKEN_BITWISE_AND: return "TOKEN_BITWISE_AND";
-        case TOKEN_BITWISE_OR: return "TOKEN_BITWISE_OR";
-        case TOKEN_BITWISE_XOR: return "TOKEN_BITWISE_XOR";
-        case TOKEN_BITWISE_NOT: return "TOKEN_BITWISE_NOT";
-        case TOKEN_LSHIFT: return "TOKEN_LSHIFT";
-        case TOKEN_RSHIFT: return "TOKEN_RSHIFT";
-
-        case TOKEN_ASSIGN: return "TOKEN_ASSIGN";
-        case TOKEN_PLUS_ASSIGN: return "TOKEN_PLUS_ASSIGN";
-        case TOKEN_MINUS_ASSIGN: return "TOKEN_MINUS_ASSIGN";
-        case TOKEN_STAR_ASSIGN: return "TOKEN_STAR_ASSIGN";
-        case TOKEN_SLASH_ASSIGN: return "TOKEN_SLASH_ASSIGN";
-        case TOKEN_PERCENT_ASSIGN: return "TOKEN_PERCENT_ASSIGN";
-        case TOKEN_AND_ASSIGN: return "TOKEN_AND_ASSIGN";
-        case TOKEN_OR_ASSIGN: return "TOKEN_OR_ASSIGN";
-        case TOKEN_NOT_ASSIGN: return "TOKEN_NOT_ASSIGN";
-        case TOKEN_XOR_ASSIGN: return "TOKEN_XOR_ASSIGN";
-        case TOKEN_LSHIFT_ASSIGN: return "TOKEN_LSHIFT_ASSIGN";
-        case TOKEN_RSHIFT_ASSIGN: return "TOKEN_RSHIFT_ASSIGN";
-
-        default: return "UNKNOWN_TOKEN_TYPE";
+        default: return "UNKNOWN_TYPE";
     }
 }
 
 // Create a new token array
-TokenArray* create_token_array() {
+TokenArray* create_array() {
     TokenArray* arr = malloc(sizeof(TokenArray));
     if (!arr) {
         printf("Error: Failed to allocate memory for token array\n");
@@ -208,7 +185,7 @@ Token* create_token(TokenType type, const char* lexeme, int length, int line, in
 }
 
 // Fixed function signature - takes individual fields, not a Token parameter
-void add_token_to_array(TokenArray* arr, TokenType type, const char* lexeme, int length, int line, int column) {
+void add_to_array(TokenArray* arr, TokenType type, const char* lexeme, int length, int line, int column) {
     if (!arr) {
         printf("Error: Token array is NULL\n");
         return;
@@ -235,20 +212,20 @@ void add_token_to_array(TokenArray* arr, TokenType type, const char* lexeme, int
 }
 
 // Global token array instance
-TokenArray* global_token_array = 0;  // Use 0 instead of NULL for C99 compatibility
+TokenArray* global_array = 0;  // Use 0 instead of NULL for C99 compatibility
 
-void init_global_token_array() {
-    if (!global_token_array) {
-        global_token_array = create_token_array();
+void init_global_array() {
+    if (!global_array) {
+        global_array = create_array();
     }
 }
 
 // Wrapper function that matches your lexer's add_token signature
 void add_token(TokenType type, const char* lexeme, int length, int line, int column) {
-    if (!global_token_array) {
-        init_global_token_array();
+    if (!global_array) {
+        init_global_array();
     }
-    add_token_to_array(global_token_array, type, lexeme, length, line, column);
+    add_to_array(global_array, type, lexeme, length, line, column);
 }
 
 // Clean up functions
@@ -261,7 +238,7 @@ void free_token(Token* token) {
     }
 }
 
-void free_token_array(TokenArray* arr) {
+void free_array(TokenArray* arr) {
     if (arr) {
         for (int i = 0; i < arr->count; i++) {
             free_token(arr->tokens[i]);
@@ -286,7 +263,7 @@ void print_token(Token* token) {
 }
 
 // Print a single token (detailed version) - removed length field access
-void print_token_detailed(Token* token) {
+void print_detailed(Token* token) {
     if (token == 0) {
         printf("NULL TOKEN\n");
         return;
@@ -322,14 +299,14 @@ void print_all_tokens_from_array(TokenArray* arr) {
 
 // Print all tokens (for compatibility)
 void print_all_tokens() {
-    if (!global_token_array) {
+    if (!global_array) {
         printf("No tokens available\n");
         return;
     }
-    print_all_tokens_from_array(global_token_array);
+    print_all_tokens_from_array(global_array);
 }
 
-// Print tokens with filtering - commented out TOKEN_NEWLINE and TOKEN_COMMENT for now
+// Print tokens with filtering - commented out NEWLINE and COMMENT for now
 void print_tokens_filtered(TokenArray* arr) {
     if (!arr) {
         printf("Token array is NULL\n");
@@ -343,10 +320,10 @@ void print_tokens_filtered(TokenArray* arr) {
     int printed = 0;
     for (int i = 0; i < arr->count; i++) {
         if (arr->tokens[i] != 0 && 
-            arr->tokens[i]->type != TOKEN_WHITESPACE) {
+            arr->tokens[i]->type != WHITESPACE) {
             // Add these back if you have these token types:
-            // && arr->tokens[i]->type != TOKEN_NEWLINE
-            // && arr->tokens[i]->type != TOKEN_COMMENT) {
+            // && arr->tokens[i]->type != NEWLINE
+            // && arr->tokens[i]->type != COMMENT) {
             print_token(arr->tokens[i]);
             printed++;
         }
@@ -372,7 +349,7 @@ void print_tokens_as_source(TokenArray* arr) {
 }
 
 // Print token statistics
-void print_token_stats(TokenArray* arr) 
+void print_stats(TokenArray* arr) 
 {
     if (!arr) 
     {
@@ -398,7 +375,7 @@ void print_token_stats(TokenArray* arr)
 }
 
 // Debug function - removed length field access, use strlen instead
-void print_token_debug(Token* token) {
+void print_debug(Token* token) {
     if (token == 0) {
         printf("NULL TOKEN\n");
         return;
@@ -430,13 +407,13 @@ void print_token_debug(Token* token) {
 
 // Convenience functions for global array
 void print_tokens_filtered_global() {
-    print_tokens_filtered(global_token_array);
+    print_tokens_filtered(global_array);
 }
 
 void print_tokens_as_source_global() {
-    print_tokens_as_source(global_token_array);
+    print_tokens_as_source(global_array);
 }
 
-void print_token_stats_global() {
-    print_token_stats(global_token_array);
+void print_stats_global() {
+    print_stats(global_array);
 }

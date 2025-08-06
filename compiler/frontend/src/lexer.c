@@ -8,7 +8,7 @@
 
 #define TRUE 1
 #define FALSE 0
-#define KEYWORDS 22
+#define KEYWORDS 18
 
 char *source_buffer = NULL;
 char *current_input_char = NULL; 
@@ -98,7 +98,6 @@ void skip_whitespace(void)
     }
 }
 
-
 // main lexer logic
 int lexer(void)
 {
@@ -146,7 +145,7 @@ int lexer(void)
                 continue;
             }
 
-            // else it's a division operator or TOKEN_SLASH
+            // else it's a division operator or SLASH
             continue;
         }
 
@@ -186,7 +185,7 @@ int lexer(void)
                         advance();
                     }
                     lexeme[j] = '\0';
-                    add_token(TOKEN_BINARY_LITERAL, lexeme, j, line, column-j);
+                    add_token(BINARY_LITERAL, lexeme, j, line, column-j);
                     continue;
                 } 
                 
@@ -206,7 +205,7 @@ int lexer(void)
                         advance();
                     }
                     lexeme[j] = '\0';
-                    add_token(TOKEN_OCTAL_LITERAL, lexeme, j, line, column-j);
+                    add_token(OCTAL_LITERAL, lexeme, j, line, column-j);
                     continue;
                 } 
                 
@@ -226,7 +225,7 @@ int lexer(void)
                         advance();
                     }
                     lexeme[j] = '\0';
-                    add_token(TOKEN_HEX_LITERAL, lexeme, j, line, column-j);
+                    add_token(HEX_LITERAL, lexeme, j, line, column-j);
                     continue;
                 }
 
@@ -260,7 +259,7 @@ int lexer(void)
                     advance();
                 }
                 lexeme[i] = '\0';
-                add_token(has_point ? TOKEN_FLOAT_LITERAL : TOKEN_INT_LITERAL, lexeme, i, line, column-i);
+                add_token(has_point ? FLOAT_LITERAL : INT_LITERAL, lexeme, i, line, column-i);
                 continue;
             }
             else
@@ -296,7 +295,7 @@ int lexer(void)
                     advance();
                 }
                 lexeme[i] = '\0';
-                add_token(has_point ? TOKEN_FLOAT_LITERAL : TOKEN_INT_LITERAL, lexeme, i, line, column-i);
+                add_token(has_point ? FLOAT_LITERAL : INT_LITERAL, lexeme, i, line, column-i);
                 continue;
             }
         }
@@ -317,8 +316,6 @@ int lexer(void)
             }
             lexeme[i] ='\0';
 
-            // TODO: check to see if identifer is keyword == done
-            // next is to map each keyword to their corresponding token
             int j = 0;
             while(j != KEYWORDS)
             {
@@ -332,7 +329,7 @@ int lexer(void)
 
             if (j == KEYWORDS)
             {
-                add_token(TOKEN_IDENTIFIER, lexeme, i, line, column-i);
+                add_token(IDENTIFIER, lexeme, i, line, column-i);
             }
             // advance();
             continue; 
@@ -361,7 +358,7 @@ int lexer(void)
             lexeme[i] = '\0';
             advance(); // skip closing quote
 
-            add_token(TOKEN_STRING_LITERAL, lexeme, i, line, column);
+            add_token(STRING_LITERAL, lexeme, i, line, column);
             free(lexeme);
             continue;
         }
@@ -369,165 +366,167 @@ int lexer(void)
         switch(ch)
         {
             case '"': 
-                add_token(TOKEN_DOUBLE_QUOTE, "\"", 1, line, column); 
+                add_token(DOUBLE_QUOTE, "\"", 1, line, column); 
                 advance();
                 goto string_and_char; 
                 continue;
             case '\'': 
-                add_token(TOKEN_QUOTE, "\'", 1, line, column); 
+                add_token(QUOTE, "\'", 1, line, column); 
                 advance(); 
                 goto string_and_char; 
                 continue;
             case '(': 
-                add_token(TOKEN_LPAREN, "(", 1, line, column); 
+                add_token(LPAREN, "(", 1, line, column); 
                 advance(); 
                 continue;
             case ')': 
-                add_token(TOKEN_RPAREN, ")", 1, line, column); 
+                add_token(RPAREN, ")", 1, line, column); 
                 advance(); 
                 continue;
             case '{': 
-                add_token(TOKEN_LCURLY, "{", 1, line, column); 
+                add_token(LCURLY, "{", 1, line, column); 
                 advance(); 
                 continue;
             case '}': 
-                add_token(TOKEN_RCURLY, "}", 1, line, column); 
+                add_token(RCURLY, "}", 1, line, column); 
                 advance(); 
                 continue;
             case '[': 
-                add_token(TOKEN_LBRACKET, "[", 1, line, column); 
+                add_token(LBRACKET, "[", 1, line, column); 
                 advance(); 
                 continue;
             case ']': 
-                add_token(TOKEN_RBRACKET, "]", 1, line, column); 
+                add_token(RBRACKET, "]", 1, line, column); 
                 advance(); 
                 continue;
             case ';': 
-                add_token(TOKEN_SEMICOLON, ";", 1, line, column); 
+                add_token(SEMICOLON, ";", 1, line, column); 
                 advance(); 
                 continue;
             case ':': 
-                add_token(TOKEN_COLON, ":", 1, line, column); 
+                add_token(COLON, ":", 1, line, column); 
                 advance(); 
                 continue;
             case ',': 
-                add_token(TOKEN_COMMA, ",", 1, line, column); 
+                add_token(COMMA, ",", 1, line, column); 
                 advance(); 
                 continue;
             case '.':
                 if (peek(1) == '.' && peek(2) == '.') 
                 {
-                    add_token(TOKEN_ELLIPSIS, "...", 3, line, column);
+                    add_token(UNKNOWN, "...", 3, line, column);
                     advance(); advance(); advance();
                     continue;
                 } else 
                 {
-                    add_token(TOKEN_DOT, ".", 1, line, column);
+                    add_token(DOT, ".", 1, line, column);
                     advance();
                     continue;
                 }
             case '=':
                 if (peek(1) == '=')
                 {
-                    add_token(TOKEN_EQUAL, "==", 3, line, column);
+                    add_token(EQUAL, "==", 3, line, column);
                     advance();
                     advance();
                     continue;
                 } else 
                 {
                     char lexeme[2] = {ch, '\0'};
-                    add_token(TOKEN_ASSIGN, lexeme, 2, line, column); 
+                    add_token(ASSIGN, lexeme, 2, line, column); 
                     advance(); 
                     continue;
                 }
             case '/':
                 if (peek(1) == '=')
                 {
-                    add_token(TOKEN_SLASH_EQUAL, "/=", 3, line, column);
+                    add_token(SLASH_EQUAL, "/=", 3, line, column);
                     advance();
                     advance();
                     continue;
                 } else 
                 {
                     char lexeme[2] = {ch, '\0'};
-                    add_token(TOKEN_SLASH, lexeme, 2, line, column); 
+                    add_token(SLASH, lexeme, 2, line, column); 
                     advance(); 
                     continue;
                 }
             case '-':
                 if (peek(1) == '-')
                 {
-                    add_token(TOKEN_MINUS_MINUS, "--", 3, line, column);
+                    add_token(MINUS_MINUS, "--", 3, line, column);
                     advance();
                     advance();
+                    printf("minusminus\n");
                     continue;
                 }
                 if (peek(1) == '=')
                 {
-                    add_token(TOKEN_MINUS_ASSIGN, "-=", 3, line, column);
+                    add_token(MINUS_ASSIGN, "-=", 3, line, column);
                     advance();
                     advance();
                     continue;
                 }
                 if (peek(1) == '>')
                 {
-                    add_token(TOKEN_ARROW, "->", 3, line, column);
+                    add_token(ARROW, "->", 3, line, column);
                     advance();
                     advance();
                     continue;
                 } else 
                 {
                     char lexeme[2] = {ch, '\0'};
-                    add_token(TOKEN_MINUS, lexeme, 2, line, column); 
+                    add_token(MINUS, lexeme, 2, line, column); 
                     advance(); 
                     continue;
                 }
             case '+':
                 if (peek(1) == '+')
                 {
-                    add_token(TOKEN_PLUS_PLUS, "++", 3, line, column);
+                    add_token(PLUS_PLUS, "++", 3, line, column);
                     advance();
                     advance();
+                    printf("minusminus\n");
                     continue;
                 }
                 if (peek(1) == '=')
                 {
-                    add_token(TOKEN_PLUS_ASSIGN, "+=", 3, line, column);
+                    add_token(PLUS_ASSIGN, "+=", 3, line, column);
                     advance();
                     advance();
                     continue;
                 } else 
                 {
                     char lexeme[2] = {ch, '\0'};
-                    add_token(TOKEN_PLUS, lexeme, 2, line, column); 
+                    add_token(PLUS, lexeme, 2, line, column); 
                     advance(); 
                     continue;
                 }
             case '*':
                 if (peek(1) == '*')
                 {
-                    add_token(TOKEN_STAR_STAR, "**", 3, line, column);
+                    add_token(STAR_STAR, "**", 3, line, column);
                     advance();
                     advance();
                     continue;
                 }
                 if (peek(1) == '=')
                 {
-                    add_token(TOKEN_STAR_ASSIGN, "*=", 3, line, column);
+                    add_token(STAR_ASSIGN, "*=", 3, line, column);
                     advance();
                     advance();
                     continue;
                 } else 
                 {
                     char lexeme[2] = {ch, '\0'};
-                    add_token(TOKEN_STAR, lexeme, 2, line, column); 
+                    add_token(STAR, lexeme, 2, line, column); 
                     advance(); 
                     continue;
                 }
             default: 
             {
                 // char unknown[2] = {ch, '\0'};
-                // add_token(TOKEN_UNKNOWN, unknown, 1, line, column);
+                // add_token(UNKNOWN, unknown, 1, line, column);
                 advance();
                 break;
             }
@@ -535,14 +534,10 @@ int lexer(void)
 
         // If we get here, we didn't match any token pattern
         char unknown[2] = {ch, '\0'};
-        add_token(TOKEN_UNKNOWN, unknown, 1, line, column);
+        add_token(UNKNOWN, unknown, 1, line, column);
         advance();
     }
 
     return 0;
 }
-
-
-
-
 

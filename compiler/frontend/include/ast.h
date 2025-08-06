@@ -9,5 +9,12 @@ struct AST_H_{
     Node root;
 };
 
+typedef enum 
+{
+    VAR_DECLARATION;
+    CONST_DECLARATION;
+} AST_Type;
+
+
 
 #endif

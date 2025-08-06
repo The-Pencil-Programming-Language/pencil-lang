@@ -1,18 +1,19 @@
 
 age: int = 35
-address: long = 0X12AF
 gender: char = 'm'
 name: str = "Paul"
 
-main() -> void 
-{
-    
-    int binary = 0b10101;
-    int octal_num = 0o123456;
-    int hex = 0x123A;
-    float num_f = 12.3452
+age == "Phil";
+++age;
++=
+--age;
+> int
+/*
+fn main() {
     a:int = 4;
     const PI: float = 3.142;
-
     area:float = a * a * PI;
+    
+    area
 } 
+*/
