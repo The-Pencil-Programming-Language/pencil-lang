@@ -399,6 +399,49 @@ int lexer(void)
                 add_token(RBRACKET, "]", 1, line, column); 
                 advance(); 
                 continue;
+            case '>':
+                if (peek(1) == '>')
+                {
+                    add_token(RSHIFT, ">>", 3, line, column);
+                    advance();
+                    advance();
+                    continue;
+                } 
+                if (peek(1) == '=')
+                {
+                    add_token(GREATER_EQUAL, ">=", 3, line, column);
+                    advance();
+                    advance();
+                    continue;
+                }
+                else
+                {
+                    add_token(GREATER, ">", 2, line, column);
+                    advance();
+                    continue;
+                }
+
+            case '<':
+                if (peek(1) == '<')
+                {
+                    add_token(LSHIFT, "<<", 3, line, column);
+                    advance();
+                    advance();
+                    continue;
+                } 
+                if (peek(1) == '=')
+                {
+                    add_token(LESS_EQUAL, "<=", 3, line, column);
+                    advance();
+                    advance();
+                    continue;
+                }
+                else
+                {
+                    add_token(LESS, "<", 2, line, column);
+                    advance();
+                    continue;
+                }
             case ';': 
                 add_token(SEMICOLON, ";", 1, line, column); 
                 advance(); 
@@ -457,7 +500,6 @@ int lexer(void)
                     add_token(MINUS_MINUS, "--", 3, line, column);
                     advance();
                     advance();
-                    printf("minusminus\n");
                     continue;
                 }
                 if (peek(1) == '=')

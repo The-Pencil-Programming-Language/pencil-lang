@@ -6,7 +6,11 @@ name: str = "Paul"
 age == "Phil";
 ++age;
 +=
---age;
+-=
+*=
+==
+++
+--
 > int
 /*
 fn main() {

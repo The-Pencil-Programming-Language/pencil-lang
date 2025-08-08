@@ -100,7 +100,9 @@ const char* tokentype_to_string(TokenType type)
         case DROP: return "DROP";
 
         case PLUS: return "PLUS";
+        case PLUS_PLUS: return "PLUS_PLUS";
         case MINUS: return "MINUS";
+        case MINUS_MINUS: return "MINUS_MINUS";
         case STAR: return "STAR";
         case SLASH: return "SLASH";
         case PERCENT: return "PERCENT";
