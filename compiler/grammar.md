@@ -93,7 +93,7 @@
     | <expr> ";"
     | <func_call> ";"
     | <if_statement>
-    | <while_statement>
+    | <loop_statement>
     | <return_statement>
 
 

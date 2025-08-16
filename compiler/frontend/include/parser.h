@@ -13,30 +13,25 @@ typedef struct
 } Parser;
 
 /* parser functions */
-Parser init_parser(void);
+Parser* init_parser(void);
 
 // lookahead in token stream
-Token peek(Parser* parser);
+Token peek_parser(Parser* parser);
 
 // advance in token stream
-Token advance(Parser *parser);
+Token advance_parser(Parser* parser);
 
 #define TRUE 1
 #define FALSE 0
+
 // match current token in parser stream with a given token
-int match(Parser *parser, TokenType type);
+int match(Parser* parser, TokenType type);
 
 // return error message on finding different token
-int expect(Parser* parser, TokenType type, char* errorMessage);
+int expect(Parser* parser, TokenType type, const char* errorMessage);
 
-// parse variable
-// parse const
-// parse stmt
-// parse function
-// parse loop
-// parse if stmt
-
-
+// consume a token, add it to the parse tree
+Token consume(Parser* parser);
 
 
 #endif

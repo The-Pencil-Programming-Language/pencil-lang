@@ -23,6 +23,7 @@ const char *keywords[] =
     "const"
 };
 
+
 TokenType keyword_to_token(char *keyword)
 {
     if (strcmp(keyword, "if") == 0) return IF;
@@ -132,7 +133,7 @@ const char* tokentype_to_string(TokenType type)
         case SLASH_ASSIGN: return "SLASH_ASSIGN";
         case PERCENT_ASSIGN: return "PERCENT_ASSIGN";
 
-        default: return "UNKNOWN_TYPE";
+        default: return "UNKNOWN";
     }
 }
 

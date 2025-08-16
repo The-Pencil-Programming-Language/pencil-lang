@@ -1,23 +1,4 @@
+// testing parsing
 
-age: int = 35
-gender: char = 'm'
-name: str = "Paul"
-
-age == "Phil";
-++age;
-+=
--=
-*=
-==
-++
---
-> int
-/*
-fn main() {
-    a:int = 4;
-    const PI: float = 3.142;
-    area:float = a * a * PI;
-    
-    area
-} 
-*/
+age: int = 12;
+bmi: float = 1.25;

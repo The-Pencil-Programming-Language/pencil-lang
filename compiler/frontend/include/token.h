@@ -12,6 +12,11 @@ symbols - _, [, ], {, }, ?, (, ), &, $, #, @, |, /, \,
 Define token types (enums and macros for keywords, operators, identifiers etc.)
 */
 
+
+// Declare, not define
+extern const char *keywords[];
+#define KEYWORDS 18
+
 // Tokentypes
 typedef enum 
 {
@@ -82,6 +87,7 @@ typedef enum
     RSHIFT,
     ASSIGN,
     PLUS_ASSIGN,
+    AND_ASSIGN,
     MINUS_ASSIGN,
     STAR_ASSIGN,
     SLASH_ASSIGN,
@@ -107,7 +113,7 @@ typedef struct
 
 extern Token* tokens[];
 extern int  count;
-extern const char *keywords[];
+// extern const char *keywords[];
 extern TokenArray* global_array;
 
 // returns the string of a token type

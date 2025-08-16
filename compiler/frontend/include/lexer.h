@@ -21,7 +21,6 @@ void load_source(const char *filename);
 char peek(int offset);
 void advance(void);
 void skip_comments(void);
-void skip_whitespace(void);
 int lexer(void);
 
 // void add_token(TokenType type, const char* lexeme, int length);

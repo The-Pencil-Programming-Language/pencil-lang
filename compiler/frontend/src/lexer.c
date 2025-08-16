@@ -8,7 +8,6 @@
 
 #define TRUE 1
 #define FALSE 0
-#define KEYWORDS 18
 
 char *source_buffer = NULL;
 char *current_input_char = NULL; 
@@ -79,24 +78,15 @@ void advance(void)
     current_input_char++;
 }
 
-void skip_whitespace(void)
-{
-    while(1)
-    {
-        char ch = *current_input_char;
-        switch(ch)
-        {
-            case ' ':
-            case '\t':
-            case '\r':
-            case '\n':
-                advance();
-                break;
-            default:
-                return;
-        }
-    }
-}
+// int match(char expected)
+// {
+//     if (peek(1) == expected)
+//     {
+//         advance();
+//         return TRUE;
+//     }
+//     return FALSE;
+// }
 
 // main lexer logic
 int lexer(void)
@@ -104,9 +94,13 @@ int lexer(void)
     printf("Lexer...\n");
     for(;;)
     {
-        skip_whitespace();
-
         char ch = *current_input_char;
+        
+        if (isspace(ch))
+        {
+            advance();
+            continue;
+        }
 
         if (ch == '/')
         {
@@ -119,6 +113,7 @@ int lexer(void)
                 }
                 if (ch == '\n') advance();  // (NOTE: only if newline) | consume the newline (if not EOF)
                 continue;
+                
             }
             else if (peek(1) == '*')
             {
@@ -131,7 +126,7 @@ int lexer(void)
                     if (ch == '\0')
                     {
                         printf("Error: Unclosed block comment.\n");
-                        break;
+                        exit(1);
                     }
 
                     if (peek(1) == '*' && peek(2) == '/')
@@ -143,6 +138,10 @@ int lexer(void)
 
                 advance();
                 continue;
+            }
+            else
+            {
+                goto operators_delimiters;
             }
 
             // else it's a division operator or SLASH
@@ -158,10 +157,6 @@ int lexer(void)
         
         // handle digits
         // handle different number systems like hex, octal and binary
-        // check for 0x or 0X
-        // check for 0b or 0B
-        // check for 0o or 0O
-        // and for floating point check for point '.' while scanning
         if (isdigit(ch))
         {
             if (ch == '0')
@@ -363,15 +358,16 @@ int lexer(void)
             continue;
         }
 
+        operators_delimiters:
         switch(ch)
         {
             case '"': 
-                add_token(DOUBLE_QUOTE, "\"", 1, line, column); 
+                // add_token(DOUBLE_QUOTE, "\"", 1, line, column); 
                 advance();
                 goto string_and_char; 
                 continue;
             case '\'': 
-                add_token(QUOTE, "\'", 1, line, column); 
+                // add_token(QUOTE, "\'", 1, line, column); 
                 advance(); 
                 goto string_and_char; 
                 continue;
@@ -480,7 +476,7 @@ int lexer(void)
                     advance(); 
                     continue;
                 }
-            case '/':
+                case '/':
                 if (peek(1) == '=')
                 {
                     add_token(SLASH_EQUAL, "/=", 3, line, column);
@@ -562,6 +558,27 @@ int lexer(void)
                 {
                     char lexeme[2] = {ch, '\0'};
                     add_token(STAR, lexeme, 2, line, column); 
+                    advance(); 
+                    continue;
+                }
+            case '&':
+                if (peek(1) == '&')
+                {
+                    add_token(AND, "&&", 3, line, column);
+                    advance();
+                    advance();
+                    continue;
+                }
+                if (peek(1) == '=')
+                {
+                    add_token(AND_ASSIGN, "&=", 3, line, column);
+                    advance();
+                    advance();
+                    continue;
+                } else 
+                {
+                    char lexeme[2] = {ch, '\0'};
+                    add_token(BITWISE_AND, lexeme, 2, line, column); 
                     advance(); 
                     continue;
                 }
