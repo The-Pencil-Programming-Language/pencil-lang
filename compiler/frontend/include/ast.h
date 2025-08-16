@@ -38,14 +38,14 @@ typedef struct
     char* variable_name;
     char* typename;
     struct ASTNode* value;
-} var_declaration;
+} VarDeclaration;
 
 typedef struct
 {
     char* variable_name;
     char* typename;
     struct ASTNode* value;
-} const_declaration;
+} ConstDeclaration;
 
 typedef struct
 {
@@ -54,49 +54,49 @@ typedef struct
     ASTNode** params;   // parameters stored in an array
     int param_count;
     ASTNode* body;
-} func_declaration;
+} FuncDeclaration;
 
 typedef struct
 {
     Token op;
     ASTNode* left;
     ASTNode* right;
-} binary_expr;
+} BinaryExpr;
 
 typedef struct
 {
     Token op;
     ASTNode* operand;
-} unary_expr;
+} UnaryExpr;
 
 typedef struct
 {
     char* literal_value;
-} literal;
+} Literal;
 
 typedef struct
 {
     ASTNode** stmts;
     int stmt_count;
-} block;
+} Block;
 
 typedef struct
 {
     char* name;
-} identifier;
+} Identifier;
 
 typedef struct
 {
     ASTNode* condition;
     ASTNode* then_branch;
     ASTNode* else_branch;
-} if_stmt;
+} IfStmt;
 
 typedef struct
 {
     ASTNode* condition;
     ASTNode* body;
-} loop_stmt;
+} LoopStmt;
 
 
 #endif
