@@ -49,14 +49,14 @@
 ## ** Expressions **
 <primary_expr>    = <literal> | <ident> | "(" <expr> ")"
 <unary_expr>      = ("+" | "-" | "!" | "~") <primary_expr>
-<mult_expr>       = <unary_expr> (("*" | "/" | "%") <unary_expr>)*
-<add_expr>        = <mult_expr> (("+" | "-") <mult_expr>)*
+<mult_expr>       = <primary_expr> (("*" | "/" | "%") <primary_expr>)*
+<add_expr>        = <primary_expr> (("+" | "-") <primary_expr>)*
 <relation_expr>   = <add_expr> (<comparison_op> <add_expr>)*
 <logical_expr>    = <relation_expr> (<logical_op> <relation_expr>)*
 <assign_expr>     = <ident> <assign_op> <expr>
 <expr>            = <assign_expr> | <logical_expr> | <add_expr>
 
-<index_expr>      = <ident> "[" <expr> "]"
+<index_expr>      = <ident> "[" <int_literal> "]"
 <func_call>       = <ident> "(" [<expr> ("," <expr>)*] ")"
 <range>           = <digit> "..." <digit>
 

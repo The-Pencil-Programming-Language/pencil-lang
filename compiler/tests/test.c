@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "lexer.h"
 #include "token.h"
+#include "parser.h"
 
 int main() 
 {
@@ -24,7 +25,11 @@ int main()
     print_tokens_as_source_global();  // Clean token list
     print_stats_global();      // Quick statistics
     // free_tokens();
-    free_array(global_array);
+    // free_array(global_array);
+
+    init_parser();
+    parser();
+    
     return 0;
 }
 

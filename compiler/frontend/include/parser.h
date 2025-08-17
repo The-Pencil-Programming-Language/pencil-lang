@@ -33,5 +33,7 @@ int expect(Parser* parser, TokenType type, const char* errorMessage);
 // consume a token, add it to the parse tree
 Token consume(Parser* parser);
 
+// main program that does the parsing
+int parser();
 
 #endif

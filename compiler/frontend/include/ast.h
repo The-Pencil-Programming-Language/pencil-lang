@@ -4,34 +4,76 @@
 #include "token.h"
 #include "parser.h"
 
-typedef enum 
-{
-    AST_MULT_EXPR,
-    AST_ADD_EXPR,
-    AST_RELATIONAL_EXPR,
-    AST_LOGICAL_EXPR,
-    AST_ASSIGN_EXPR,
-    AST_VAR_D,
-    AST_CONST_D,
-    AST_FUNC_D, 
-    AST_IF_STMT,
-    AST_LOOP_STMT,
-    AST_RETURN_STMT,
-    AST_BINARY_STMT,
-    AST_UNARY_STMT,
-    AST_LITERAL_STMT,
-    AST_BLOCK_STMT,
-    AST_CASE_STMT,
-} ASTNodeType;
+
+// forward declaration of ASTNode
+typedef struct ASTNode ASTNode;
 
 typedef struct
 {
-    ASTNodeType type;
+    char* name;
+} Identifier;
+
+typedef struct
+{
+    char* literal_value;
+} Literal;
+
+typedef enum
+{
+    OP_ADD, OP_SUB, OP_MUL, OP_DIV, OP_MOD,
+    OP_LT, OP_GT, OP_LE, OP_GE, OP_EQ, OP_NE,
+    OP_AND, OP_OR,
+    OP_ASSIGN, OP_PLUS_ASSIGN, OP_MINUS_ASSIGN,
+    OP_POS, OP_NEG, OP_NOT, OP_BITNOT
+} Operator;
+
+typedef struct
+{
     union
     {
-       // add the type defintions above
+        Literal literal;
+        Identifier ident;
+        // or another expression
     };
-} ASTNode;
+} PrimaryExpr;
+
+typedef struct
+{
+    Token op;
+    ASTNode* left;
+    ASTNode* right;
+} BinaryExpr;
+
+typedef struct
+{
+    Token op;
+    PrimaryExpr operand;
+} UnaryExpr;
+
+typedef struct
+{
+    char* lhs;  // identifier
+    Operator op; // =, +=, -=, etc
+    ASTNode *rhs;  // as as value in variable declaration
+} AssignExpr;
+
+typedef struct
+{
+    Token op; // valid-> *, / and %
+    PrimaryExpr** operands;   // list of primary expressions to  multiply
+} MultExpr;
+
+typedef struct
+{
+    int start;
+    int stop;
+} RangeExpr;
+
+typedef struct
+{
+    char* array_name;
+    int int_literal;
+} IndexExpr;
 
 typedef struct
 {
@@ -58,32 +100,9 @@ typedef struct
 
 typedef struct
 {
-    Token op;
-    ASTNode* left;
-    ASTNode* right;
-} BinaryExpr;
-
-typedef struct
-{
-    Token op;
-    ASTNode* operand;
-} UnaryExpr;
-
-typedef struct
-{
-    char* literal_value;
-} Literal;
-
-typedef struct
-{
     ASTNode** stmts;
     int stmt_count;
 } Block;
-
-typedef struct
-{
-    char* name;
-} Identifier;
 
 typedef struct
 {
@@ -98,5 +117,67 @@ typedef struct
     ASTNode* body;
 } LoopStmt;
 
+
+typedef enum 
+{
+    MULT_EXPR,
+    ADD_EXPR,
+    RELATIONAL_EXPR,
+    LOGICAL_EXPR,
+    ASSIGN_EXPR,
+    VAR_DECL,
+    CONST_DECL,
+    FUNC_DECL, 
+    IF_STMT,
+    LOOP_STMT,
+    RETURN_STMT,
+    BINARY_STMT,
+    UNARY_STMT,
+    LITERAL_STMT,
+    BLOCK_STMT,
+    CASE_STMT,
+} ASTNodeType;
+
+struct ASTNode
+{
+    ASTNodeType type;
+    union
+    {
+        VarDeclaration VarDeclaration;
+        ConstDeclaration ConstDeclaration;
+        FuncDeclaration FuncDeclaration;
+        IfStmt IfStmt;
+        LoopStmt LoopStmt;
+        AssignExpr assign_expr;
+        BinaryExpr binary_expr;
+        UnaryExpr unary_expr;
+        PrimaryExpr primary_expr;
+        MultExpr mult_expr;
+        Block block;
+        // add more
+    };
+};
+
+// ========= function prototypes ============ //
+ASTNode* parse_var_declaration();
+ASTNode* parse_const_declaration();
+ASTNode* parse_func_declaration();
+
+ASTNode* parse_if_stmt();
+ASTNode* parse_loop_stmt();
+ASTNode* parse_return_stmt();
+
+ASTNode *parse_primary_expr();
+ASTNode *parse_unary_expr();
+ASTNode *parse_mult_expr();
+ASTNode *parse_add_expr();
+ASTNode *parse_relation_expr();
+ASTNode *parse_logical_expr();
+ASTNode *parse_assign_expr();
+ASTNode *parse_expr();
+
+ASTNode *parse_index_expr();
+ASTNode *parse_func_call();
+ASTNode *parse_range();
 
 #endif
